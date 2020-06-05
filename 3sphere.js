@@ -130,3 +130,5 @@ function draw4Dpaths(paths, ctx){
     ctx.stroke();
   }
 }
+
+draw4Dpaths(generate3sphere(), context)
