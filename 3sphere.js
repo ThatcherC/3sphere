@@ -1,12 +1,13 @@
-nfaces = 30;     //number of edges of a circle
+nfaces = 60;     //number of edges of a circle
 arcStep = 2*Math.PI/nfaces;
 
 divisions = 12;  //number of lines of constant value for each hyperspherical param
 
-R = 100
+R = 160
 
 var c = document.getElementById("canvas");
 var context = c.getContext("2d");
+context.translate(200,200);
 
 function hypersphericalToCartesian(psi, theta, phi){
   const r = R;
@@ -56,16 +57,68 @@ function generate2sphere(){
   return paths;
 }
 
-function draw4Dpaths(paths, ctx){
-  const proj4to3 = math.matrix([[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
+function generate3sphere(){
+  paths = []
+  var i =0;
+
+  var psis = [] //values of constant psi
+  var thetas = []  //values of constant theta
+  var phis = []  //values of constant phi
+
+  for(i = 1; i < divisions; i++) psis.push(i*Math.PI/divisions);
+  for(i = 1; i < divisions; i++) thetas.push(i*Math.PI/divisions);
+  for(i = 0; i < 2*divisions; i++) phis.push(i*Math.PI/divisions);
+
+  for(n in psis){
+    for(m in thetas){
+      paths.push(generateParallel(psis[n], thetas[m]));
+    }
+    for(m in phis){
+      paths.push(generateMeridian(psis[n], phis[m]));
+    }
+  }
+
+  for(n in thetas){
+    for(m in phis){
+      //paths.push(generateHypermeridian(thetas[n], phis[m]));
+    }
+  }
+
+  return paths;
+}
+
+function project4to3to2(paths4d){
+  const proj4to3 = math.matrix([[1,0,0,0],[0,0,1,0],[0,0,0,1]]);
 
   const paths3d = paths.map(path => path.map(point4d => math.multiply(proj4to3, point4d)))
 
-  const rotate3d = math.matrix([[1,0,0],[0,1,0],[0,0,1]])
+  const rotate3d = math.matrix([[0,1,0],[1,0,0],[0,0,1]])
   const proj3to2 = math.matrix([[0,1,0],[0,0,1]])
   const mat3to2 = math.multiply(proj3to2, rotate3d);
 
   const paths2d = paths3d.map(path => path.map(point3d => math.multiply(mat3to2, point3d)))
+
+  return paths2d;
+}
+
+function project4to2direct(paths4d){
+
+  //
+  const rotate4d = math.matrix([[ 1.0, 0.3,  0.0, 0.1],
+                                [ 0.3, 1.0,  0.3, -0.8],
+                                [ 0.0,-0.3,  0.2, 0.9],
+                                [-0.1, 0.8, -0.9, 0.2]]);
+  const proj4to2 = math.matrix([[1,0,0,0],[0,0,0,1]]);  //arbitrary 4->2 projection
+  const mat4to2 = math.multiply(proj4to2, rotate4d);
+
+  const paths2d = paths4d.map(path => path.map(point3d => math.multiply(mat4to2, point3d)))
+
+  return paths2d;
+}
+
+function draw4Dpaths(paths, ctx){
+  //const paths2d = project4to3to2(paths);
+  const paths2d = project4to2direct(paths);
 
   for(i in paths2d){
     const points = paths2d[i].map(point2d => point2d.valueOf())
@@ -77,13 +130,3 @@ function draw4Dpaths(paths, ctx){
     ctx.stroke();
   }
 }
-
-/*
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(300, 150);
-  ctx.stroke();
-
-*/
