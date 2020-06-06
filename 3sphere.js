@@ -1,7 +1,7 @@
 nfaces = 60;     //number of edges of a circle
 arcStep = 2*Math.PI/nfaces;
 
-divisions = 12;  //number of lines of constant value for each hyperspherical param
+divisions = 11;  //number of lines of constant value for each hyperspherical param
 
 R = 280
 
