@@ -136,7 +136,7 @@ function addp(n, step){
   q = math.divide(q, math.norm(q)) //normalize q
 
   clearCanvas()
-  draw4Dpaths(threeSphere, context)
+  draw4DpathsWithBlur(threeSphere, context)
 }
 
 function addq(n, step){
@@ -147,7 +147,12 @@ function addq(n, step){
   p = math.divide(p, math.norm(p)) //normalize p
 
   clearCanvas()
-  draw4Dpaths(threeSphere, context)
+  draw4DpathsWithBlur(threeSphere, context)
+}
+
+function setIdealPQ(){
+  p = math.matrix([0.64790, 0.12582, -0.70325, -0.26423])
+  q = math.matrix([-0.51569, -0.61322, -0.42755, -0.41857])
 }
 
 function draw4Dpaths(paths, ctx){
@@ -165,6 +170,23 @@ function draw4Dpaths(paths, ctx){
     }
     ctx.stroke();
   }
+}
+
+function draw4DpathsNoBlur(paths, ctx){
+  context.strokeStyle = "#000000";
+  context.shadowBlur = 0;
+  context.shadowColor = "black";
+  draw4Dpaths(paths, ctx);
+}
+
+function draw4DpathsWithBlur(paths, ctx){
+  context.strokeStyle = "#FFFFFF";
+  context.shadowBlur = 10;
+  context.shadowColor = "black";
+
+  draw4Dpaths(paths, ctx);
+  context.shadowBlur = 0;
+  draw4Dpaths(paths, ctx);
 }
 
 function clearCanvas(){
