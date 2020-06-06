@@ -3,11 +3,11 @@ arcStep = 2*Math.PI/nfaces;
 
 divisions = 12;  //number of lines of constant value for each hyperspherical param
 
-R = 160
+R = 280
 
 var c = document.getElementById("canvas");
 var context = c.getContext("2d");
-context.translate(200,200);
+context.translate(300,300);
 
 function hypersphericalToCartesian(psi, theta, phi){
   const r = R;
@@ -102,8 +102,6 @@ function project4to3to2(paths4d){
 }
 
 function project4to2direct(paths4d){
-
-  //
   const rotate4d = math.matrix([[ 1.0, 0.3,  0.0, 0.1],
                                 [ 0.3, 1.0,  0.3, -0.8],
                                 [ 0.0,-0.3,  0.2, 0.9],
@@ -116,9 +114,47 @@ function project4to2direct(paths4d){
   return paths2d;
 }
 
+
+// x and y are 4d math.js vectors like x = math.matrix([1,2,3,4])
+function project4to2directMoreDirect(paths4d, x, y){
+  const mat4to2 = math.matrix([x,y]);
+
+  const paths2d = paths4d.map(path => path.map(point3d => math.multiply(mat4to2, point3d)))
+
+  return paths2d;
+}
+
+p = math.matrix([1,0,0,0])
+q = math.matrix([0,1,0,0])
+inc = 0.1
+
+function addp(n, step){
+  p._data[n] += step;
+
+  p = math.divide(p, math.norm(p)) //normalize p
+  q = math.subtract(q, math.multiply(p, math.dot(p,q)))  //make q orthogonal to p
+  q = math.divide(q, math.norm(q)) //normalize q
+
+  clearCanvas()
+  draw4Dpaths(threeSphere, context)
+}
+
+function addq(n, step){
+  q._data[n] += step;
+
+  q = math.divide(q, math.norm(q)) //normalize q
+  p = math.subtract(p, math.multiply(q, math.dot(q,p)))  //make p orthogonal to q
+  p = math.divide(p, math.norm(p)) //normalize p
+
+  clearCanvas()
+  draw4Dpaths(threeSphere, context)
+}
+
 function draw4Dpaths(paths, ctx){
   //const paths2d = project4to3to2(paths);
-  const paths2d = project4to2direct(paths);
+  //const paths2d = project4to2direct(paths);
+
+  const paths2d = project4to2directMoreDirect(paths, p, q);
 
   for(i in paths2d){
     const points = paths2d[i].map(point2d => point2d.valueOf())
@@ -131,4 +167,18 @@ function draw4Dpaths(paths, ctx){
   }
 }
 
-draw4Dpaths(generate3sphere(), context)
+function clearCanvas(){
+    // Store the current transformation matrix
+  context.save();
+
+  // Use the identity matrix while clearing the canvas
+  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.clearRect(0, 0, c.width, c.height);
+
+  // Restore the transform
+  context.restore();
+}
+
+threeSphere = generate3sphere();
+
+draw4Dpaths(threeSphere, context)
