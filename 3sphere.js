@@ -1,7 +1,7 @@
 nfaces = 60;     //number of edges of a circle
 arcStep = 2*Math.PI/nfaces;
 
-divisions = 11;  //number of lines of constant value for each hyperspherical param
+divisions = 12;  //number of lines of constant value for each hyperspherical param
 
 R = 280
 
@@ -128,6 +128,18 @@ p = math.matrix([1,0,0,0])
 q = math.matrix([0,1,0,0])
 inc = 0.1
 
+function displayPQ(){
+  document.getElementById("pw").innerHTML = p._data[0].toFixed(3);
+  document.getElementById("px").innerHTML = p._data[1].toFixed(3);
+  document.getElementById("py").innerHTML = p._data[2].toFixed(3);
+  document.getElementById("pz").innerHTML = p._data[3].toFixed(3);
+
+  document.getElementById("qw").innerHTML = q._data[0].toFixed(3);
+  document.getElementById("qx").innerHTML = q._data[1].toFixed(3);
+  document.getElementById("qy").innerHTML = q._data[2].toFixed(3);
+  document.getElementById("qz").innerHTML = q._data[3].toFixed(3);
+}
+
 function addp(n, step){
   p._data[n] += step;
 
@@ -135,6 +147,7 @@ function addp(n, step){
   q = math.subtract(q, math.multiply(p, math.dot(p,q)))  //make q orthogonal to p
   q = math.divide(q, math.norm(q)) //normalize q
 
+  displayPQ()
   clearCanvas()
   draw4DpathsWithBlur(threeSphere, context)
 }
@@ -146,6 +159,7 @@ function addq(n, step){
   p = math.subtract(p, math.multiply(q, math.dot(q,p)))  //make p orthogonal to q
   p = math.divide(p, math.norm(p)) //normalize p
 
+  displayPQ()
   clearCanvas()
   draw4DpathsWithBlur(threeSphere, context)
 }
@@ -153,6 +167,9 @@ function addq(n, step){
 function setIdealPQ(){
   p = math.matrix([0.64790, 0.12582, -0.70325, -0.26423])
   q = math.matrix([-0.51569, -0.61322, -0.42755, -0.41857])
+  displayPQ()
+  clearCanvas()
+  draw4DpathsWithBlur(threeSphere, context)
 }
 
 function draw4Dpaths(paths, ctx){
@@ -203,4 +220,5 @@ function clearCanvas(){
 
 threeSphere = generate3sphere();
 
+displayPQ()
 draw4Dpaths(threeSphere, context)

@@ -1,47 +1,56 @@
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>3 sphere</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.0.1/math.min.js"></script>
 </head>
 <body>
-
+<center>
   <canvas id="canvas" width=600 height=600>
   </canvas>
 
   <table>
     <tr>
       <td></td>
-      <td><button onclick="addp(0, inc)">+</button></td>
-      <td><button onclick="addp(1, inc)">+</button></td>
-      <td><button onclick="addp(2, inc)">+</button></td>
-      <td><button onclick="addp(3, inc)">+</button></td>
+      <td><button onclick="addp(0, inc)" style="width:4em">+</button></td>
+      <td><button onclick="addp(1, inc)" style="width:4em">+</button></td>
+      <td><button onclick="addp(2, inc)" style="width:4em">+</button></td>
+      <td><button onclick="addp(3, inc)" style="width:4em">+</button></td>
       <td></td>
-      <td><button onclick="addq(0, inc)">+</button></td>
-      <td><button onclick="addq(1, inc)">+</button></td>
-      <td><button onclick="addq(2, inc)">+</button></td>
-      <td><button onclick="addq(3, inc)">+</button></td>
+      <td><button onclick="addq(0, inc)" style="width:4em">+</button></td>
+      <td><button onclick="addq(1, inc)" style="width:4em">+</button></td>
+      <td><button onclick="addq(2, inc)" style="width:4em">+</button></td>
+      <td><button onclick="addq(3, inc)" style="width:4em">+</button></td>
     </tr>
     <tr>
-      <td>p</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>  q</td>
+      <td><b>p</b></td>
+      <td id="pw"></td>
+      <td id="px"></td>
+      <td id="py"></td>
+      <td id="pz"></td>
+      <td><b>  q</b></td>
+      <td id="qw"></td>
+      <td id="qx"></td>
+      <td id="qy"></td>
+      <td id="qz"></td>
     </tr>
     <tr>
       <td></td>
-      <td><button onclick="addp(0, -inc)">-</button></td>
-      <td><button onclick="addp(1, -inc)">-</button></td>
-      <td><button onclick="addp(2, -inc)">-</button></td>
-      <td><button onclick="addp(3, -inc)">-</button></td>
+      <td><button onclick="addp(0, -inc)" style="width:4em">-</button></td>
+      <td><button onclick="addp(1, -inc)" style="width:4em">-</button></td>
+      <td><button onclick="addp(2, -inc)" style="width:4em">-</button></td>
+      <td><button onclick="addp(3, -inc)" style="width:4em">-</button></td>
       <td></td>
-      <td><button onclick="addq(0, -inc)">+</button></td>
-      <td><button onclick="addq(1, -inc)">+</button></td>
-      <td><button onclick="addq(2, -inc)">+</button></td>
-      <td><button onclick="addq(3, -inc)">+</button></td>
+      <td><button onclick="addq(0, -inc)" style="width:4em">+</button></td>
+      <td><button onclick="addq(1, -inc)" style="width:4em">+</button></td>
+      <td><button onclick="addq(2, -inc)" style="width:4em">+</button></td>
+      <td><button onclick="addq(3, -inc)" style="width:4em">+</button></td>
     </tr>
   </table>
-
+  </br>
+  <button onclick="setIdealPQ(); draw">Match original image</button></br>
+  <i>Click to replicate the <a href=https://en.wikipedia.org/wiki/3-sphere#/media/File:Hypersphere.png>image</a>
+that inspired this project</i>
+</center>
 
 
 
